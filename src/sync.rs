@@ -11,7 +11,7 @@ use std::alloc::Layout;
 use std::borrow::Borrow;
 use std::collections::BTreeMap;
 use std::collections::{HashMap, hash_map::RandomState};
-use std::hash::Hash;
+use std::hash::{BuildHasher, Hash};
 use std::iter::{FromIterator, IntoIterator};
 use std::ops::Index;
 
@@ -22,6 +22,7 @@ use std::sync::RwLock;
 
 /// Append-only threadsafe version of `std::collections::HashMap` where
 /// insertion does not require mutable access
+#[derive(Debug)]
 pub struct FrozenMap<K, V, S = RandomState> {
     map: RwLock<HashMap<K, V, S>>,
 }
@@ -40,7 +41,7 @@ impl<K, V> FrozenMap<K, V> {
     }
 }
 
-impl<K: Eq + Hash, V: StableDeref> FrozenMap<K, V> {
+impl<K: Eq + Hash, V: StableDeref, S: BuildHasher> FrozenMap<K, V, S> {
     // these should never return &K or &V
     // these should never delete any entries
 
