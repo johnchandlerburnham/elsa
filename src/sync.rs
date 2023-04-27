@@ -26,7 +26,7 @@ pub struct FrozenMap<K, V, S = RandomState> {
     map: RwLock<HashMap<K, V, S>>,
 }
 
-impl<K, V> Default for FrozenMap<K, V> {
+impl<K, V, S: Default> Default for FrozenMap<K, V, S> {
     fn default() -> Self {
         Self {
             map: Default::default(),
