@@ -10,7 +10,7 @@ use stable_deref_trait::StableDeref;
 use std::alloc::Layout;
 use std::borrow::Borrow;
 use std::collections::BTreeMap;
-use std::collections::HashMap;
+use std::collections::{HashMap, hash_map::RandomState};
 use std::hash::Hash;
 use std::iter::{FromIterator, IntoIterator};
 use std::ops::Index;
@@ -22,8 +22,8 @@ use std::sync::RwLock;
 
 /// Append-only threadsafe version of `std::collections::HashMap` where
 /// insertion does not require mutable access
-pub struct FrozenMap<K, V> {
-    map: RwLock<HashMap<K, V>>,
+pub struct FrozenMap<K, V, S = RandomState> {
+    map: RwLock<HashMap<K, V, S>>,
 }
 
 impl<K, V> Default for FrozenMap<K, V> {
